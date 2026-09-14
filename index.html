@@ -102,7 +102,7 @@
     <nav class="nav-tabs">
       <button id="btn-app" class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠打刻</button>
       <button id="btn-shift" class="tab-btn" onclick="switchMainTab('shift')">📅 シフト申請</button>
-      <button id="btn-guide" class="tab-btn" onclick="switchMainTab('guide')">📖 使い方</button>
+      <button id="btn-guide" class="tab-btn" onclick="switchMainTab('guide')">📖 使い方ガイド</button>
     </nav>
   </header>
 
@@ -149,35 +149,72 @@
     <!-- 3. 使い方ガイド -->
     <section id="tab-guide" class="tab-content">
       <div class="content-header">
-        <h2>📖 ご利用ガイド・ルール</h2>
-        <p>作業時の基本的なルールと打刻の手順です。</p>
+        <h2>📖 ご利用ガイド・運用ルール</h2>
+        <p>作業報告や打刻、スマホ利用時の便利な手順まとめです。</p>
       </div>
       <div class="grid-cards">
-        <div class="card">
-          <span class="card-tag">基本</span>
-          <h3>⏱️ 打刻のルール</h3>
+
+        <!-- スマホホーム画面追加 -->
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <span class="card-tag tag-blue">📱 超おすすめ便利技</span>
+          <h3>スマホのホーム画面に追加</h3>
           <ul class="rule-list">
-            <li>作業を開始する際、必ず「▶️ 作業開始」を押してください。</li>
-            <li>離席・休憩時は「☕ 休憩入り」、再開時は「🏃 休憩戻り」を押します。</li>
-            <li>押し忘れた場合は「✏️ 打刻修正」タブから正しい時間を申請してください。</li>
+            <li><strong>iPhone（Safari）：</strong> 画面下の共有ボタン（四角から矢印）を押し、<strong>「ホーム画面に追加」</strong>をタップ。</li>
+            <li><strong>Android（Chrome）：</strong> 右上のメニュー（︙）から<strong>「ホーム画面に追加」</strong>または「アプリをインストール」をタップ。</li>
+            <li>アプリのようにワンタップで起動でき、毎回のURL入力や検索の手間がなくなります！</li>
           </ul>
         </div>
-        <div class="card">
-          <span class="card-tag">制作</span>
-          <h3>✨ コマ給・進捗報告</h3>
+
+        <!-- コマ給の運用分岐 -->
+        <div class="card" style="border-top: 4px solid #8b5cf6;">
+          <span class="card-tag tag-purple">🎨 コマ給の報告ルール</span>
+          <h3>完成時と途中時の使い分け</h3>
           <ul class="rule-list">
-            <li>コマ枠サイズを選び、成果物のスクショをCtrl+Vで貼り付けて送信してください。</li>
-            <li>本日の作業内容や申し送り事項はテキスト欄に記載してください。</li>
+            <li><strong>【完成した場合】➜「✨ 完成報告」から！</strong><br>コマ枠サイズと数量を選び、成果物画像を添付して送信してください。自動で給与集計シートへ加算されます。</li>
+            <li><strong>【時間内に終わらなかった場合】➜「⏳ 進捗報告」から！</strong><br>下描き・ペン入れ等の進行度を選び、現段階の作業スクショを添えて送信してください（未完成のまま完成報告で送らないようご注意ください）。</li>
           </ul>
         </div>
-        <div class="card">
-          <span class="card-tag">予定</span>
-          <h3>📅 シフト申請</h3>
+
+        <!-- 画像貼り付け＆クリップボード -->
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <span class="card-tag tag-green">💻 PC操作の小技</span>
+          <h3>スクショを直接ペースト（Ctrl+V）</h3>
           <ul class="rule-list">
-            <li>カレンダーから希望日を複数選択し、希望時間帯を指定して申請してください。</li>
-            <li>申請完了後、数分以内にスタジオカレンダーに自動反映されます。</li>
+            <li>CLIP STUDIOや画面キャプチャツールでコピーした画像を、そのまま画面上で <strong>Ctrl + V（Macは Cmd + V）</strong> するだけで添付できます。</li>
+            <li>わざわざ一度画像ファイルとしてPCに保存する必要はありません。最大10枚まで連続でペタペタ貼り付け可能です！</li>
           </ul>
         </div>
+
+        <!-- 時給打刻ルール -->
+        <div class="card">
+          <span class="card-tag tag-amber">⏰ 時給制の方</span>
+          <h3>打刻の手順と注意点</h3>
+          <ul class="rule-list">
+            <li>作業着手時に「▶️ 作業開始」、離席時は「☕ 休憩入り」➜「🏃 休憩戻り」、完了時に「⏹️ 作業終了」を押してください。</li>
+            <li>押し忘れてしまった場合は、上部タブの<strong>「✏️ 打刻修正」</strong>から正しい時間を手動申請すれば自動修正されます。</li>
+          </ul>
+        </div>
+
+        <!-- シフト申請ルール -->
+        <div class="card">
+          <span class="card-tag tag-cyan">📅 シフト希望</span>
+          <h3>日付の一括タップ申請</h3>
+          <ul class="rule-list">
+            <li>カレンダー内の入りたい日付をタップ（何日でも複数選択可）し、時間帯を指定して一括送信してください。</li>
+            <li>送信後、数分以内に右側のスタジオ共有カレンダーへ担当者カラーで自動反映されます。</li>
+          </ul>
+        </div>
+
+        <!-- 締め日・給与振込 -->
+        <div class="card">
+          <span class="card-tag tag-slate">💰 給与・明細</span>
+          <h3>締め集計と明細書PDF</h3>
+          <ul class="rule-list">
+            <li>毎月末締めにて、時給実績・コマ給集計・源泉徴収税（10.21%）の自動集計を行います。</li>
+            <li>集計完了後、登録いただいたメールアドレス宛に「支払明細書（PDF）」が自動で届きますのでご確認ください。</li>
+          </ul>
+        </div>
+
       </div>
     </section>
   </main>
@@ -187,8 +224,9 @@
   </footer>
 
   <script>
-    const SECRET_PIN = "0029"; 
+    const SECRET_PIN = "0029"; // パスコード
 
+    // 認証チェック
     window.addEventListener('DOMContentLoaded', () => {
       const savedAuth = localStorage.getItem('portal_auth_token');
       if (savedAuth === SECRET_PIN) {
@@ -214,6 +252,7 @@
       }
     });
 
+    // メインタブ切り替え
     function switchMainTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
