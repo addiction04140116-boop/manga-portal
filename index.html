@@ -16,9 +16,9 @@
       <span class="logo-text">アシスタント制作ポータル</span>
     </div>
     <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠・報告</button>
-      <button class="tab-btn" onclick="switchMainTab('shift')">📅 シフト管理・申請</button>
-      <button class="tab-btn" onclick="switchMainTab('guide')">📖 使い方・FAQ</button>
+      <button id="btn-app" class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠・報告</button>
+      <button id="btn-shift" class="tab-btn" onclick="switchMainTab('shift')">📅 シフト管理・申請</button>
+      <button id="btn-guide" class="tab-btn" onclick="switchMainTab('guide')">📖 使い方・FAQ</button>
     </nav>
   </header>
 
@@ -162,11 +162,17 @@
 
   <script>
     function switchMainTab(targetId) {
+      // すべてのボタンとタブコンテンツから active クラスを外す
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
 
-      event.currentTarget.classList.add('active');
-      document.getElementById('tab-' + targetId).classList.add('active');
+      // 押されたボタンと対象のコンテンツに active クラスを付与
+      const activeBtn = document.getElementById('btn-' + targetId);
+      const activeSec = document.getElementById('tab-' + targetId);
+      
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeSec) activeSec.classList.add('active');
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
