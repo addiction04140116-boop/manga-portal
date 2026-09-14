@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アシスタント勤怠・制作報告ポータル</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/paint-palette.png">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">アシスタント勤怠・制作ポータル</span>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠・報告フォーム</button>
+      <button class="tab-btn" onclick="switchMainTab('guide')">📖 使い方ガイド・FAQ</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- 1. アプリ本体タブ（GAS埋め込み） -->
+    <section id="tab-app" class="tab-content active">
+      <div class="content-header">
+        <h2>⏱️ 勤怠打刻・成果報告</h2>
+        <p>ペンネームを選択の上、該当するタブから送信してください（スマホからもご利用いただけます）。</p>
+      </div>
+      <div class="iframe-wrapper">
+        <iframe 
+          id="gasIframe"
+          src="https://script.google.com/macros/s/AKfycbxIGly-CT4j1MxLQKNHaBr4qpRr7keUvg-jJlYCtmhvzoTe3qJXPu1p9bbeSrdih9qEZA/exec" 
+          frameborder="0" 
+          allow="clipboard-read; clipboard-write">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- 2. 使い方ガイド・FAQタブ -->
+    <section id="tab-guide" class="tab-content">
+      <div class="content-header">
+        <h2>📖 勤怠・成果報告アプリの使い方</h2>
+        <p>作業時の打刻ルールや、押し忘れたときの対処法、コマ給申請の手順をまとめています。</p>
+      </div>
+
+      <div class="grid-cards">
+        
+        <!-- 時給打刻の使い方 -->
+        <article class="card">
+          <div class="card-tag">時給制</div>
+          <h3>⏱️ 作業の開始・終了・休憩</h3>
+          <ul class="rule-list">
+            <li><strong>開始時:</strong> 「時給打刻」タブの【▶️ 作業開始】を押します。</li>
+            <li><strong>休憩時:</strong> 席を外すときは【☕ 休憩入】、戻ったら【🏃 戻り】を押してください。</li>
+            <li><strong>終了時:</strong> 作業が終わったら【⏹️ 作業終了】を押します。</li>
+            <li><strong>深夜・日またぎ作業:</strong> 22:00〜翌朝05:00などの徹夜作業も、そのまま終了を押せば正確に実働時間が計算されます。</li>
+          </ul>
+        </article>
+
+        <!-- コマ給・完成報告の使い方 -->
+        <article class="card">
+          <div class="card-tag">コマ給制</div>
+          <h3>✨ 完成報告（コマ給の申請）</h3>
+          <ul class="rule-list">
+            <li><strong>枠サイズの選択:</strong> 担当したコマの枠サイズ（紫枠/青枠/緑枠/赤枠）を選択します。</li>
+            <li><strong>スクショの添付:</strong> 枠内の入力エリアをクリックし、クリスタ等のスクショを <code>Ctrl + V</code>（Macは <code>Cmd + V</code>）で貼り付けるだけで添付できます。</li>
+            <li><strong>複数コマ:</strong> 同じ枠サイズを複数仕上げた場合は「コマ数」を増やして一括送信できます。</li>
+          </ul>
+        </article>
+
+        <!-- 進捗報告の使い方 -->
+        <article class="card">
+          <div class="card-tag">共通</div>
+          <h3>⏳ 進捗報告（描きかけ・作業共有）</h3>
+          <ul class="rule-list">
+            <li><strong>0コマ完了の日:</strong> 描き終わらなかった日や、途中で作業を引き継ぐ場合は「進捗報告」タブから現状を共有してください。</li>
+            <li><strong>工程・進行度:</strong> 「下描き」「線画進行中（約60%）」などを選択し、スクショを添えて送信するとDiscordに通知されます。</li>
+          </ul>
+        </article>
+
+        <!-- トラブル・打刻忘れ対応 -->
+        <article class="card" style="border-left: 4px solid #ef4444;">
+          <div class="card-tag" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">困ったとき</div>
+          <h3>✏️ 終了ボタンを押し忘れた場合</h3>
+          <ul class="rule-list">
+            <li><strong>押し忘れの修正:</strong> 「打刻修正」タブから、その日の<strong>正しい開始・終了時刻と休憩時間</strong>を入力して送信してください。</li>
+            <li><strong>自動キャンセル機能:</strong> 修正申請を送信すると、システムが自動で押し忘れた打刻ログを破棄し、手動申請の時間を最優先で採用します（二重計上にはなりません）。</li>
+            <li><strong>連打・誤操作:</strong> 誤ってボタンを2回連続で押してしまっても、最初の時間がキープされますのでご安心ください。</li>
+          </ul>
+        </article>
+
+        <!-- スマホでの利用について -->
+        <article class="card">
+          <div class="card-tag">便利ワザ</div>
+          <h3>📲 スマホをタイムカード化する</h3>
+          <ul class="rule-list">
+            <li><strong>iPhone (Safari):</strong> 画面下の「共有」ボタン ＞「ホーム画面に追加」</li>
+            <li><strong>Android (Chrome):</strong> 右上の「︙」メニュー ＞「ホーム画面に追加」</li>
+            <li>ホーム画面にアイコンが作られ、アプリのようにワンタップで打刻画面を開けるようになります。</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Studio Production Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function switchMainTab(targetId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById('tab-' + targetId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
