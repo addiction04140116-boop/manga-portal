@@ -122,7 +122,7 @@ body {
   background-color: #1e293b;
 }
 
-/* シフト管理レイアウト（PCは横並び2分割） */
+/* シフト管理レイアウト */
 .shift-layout {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
