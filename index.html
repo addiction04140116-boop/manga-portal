@@ -9,25 +9,26 @@
 </head>
 <body>
 
-  <!-- ヘッダー -->
+  <!-- ヘッダーナビゲーション -->
   <header class="navbar">
     <div class="nav-brand">
       <span class="logo-icon">🎨</span>
-      <span class="logo-text">アシスタント勤怠・制作ポータル</span>
+      <span class="logo-text">アシスタント制作ポータル</span>
     </div>
     <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠・報告フォーム</button>
-      <button class="tab-btn" onclick="switchMainTab('guide')">📖 使い方ガイド・FAQ</button>
+      <button class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠・報告</button>
+      <button class="tab-btn" onclick="switchMainTab('shift')">📅 シフト管理・申請</button>
+      <button class="tab-btn" onclick="switchMainTab('guide')">📖 使い方・FAQ</button>
     </nav>
   </header>
 
   <main class="container">
 
-    <!-- 1. アプリ本体タブ（GAS埋め込み） -->
+    <!-- 1. 勤怠・成果報告タブ（GAS埋め込み） -->
     <section id="tab-app" class="tab-content active">
       <div class="content-header">
         <h2>⏱️ 勤怠打刻・成果報告</h2>
-        <p>ペンネームを選択の上、該当するタブから送信してください（スマホからもご利用いただけます）。</p>
+        <p>ペンネームを選択の上、打刻または画像添付（最大10枚）して送信してください。</p>
       </div>
       <div class="iframe-wrapper">
         <iframe 
@@ -39,7 +40,52 @@
       </div>
     </section>
 
-    <!-- 2. 使い方ガイド・FAQタブ -->
+    <!-- 2. シフト管理・申請タブ（新規追加！） -->
+    <section id="tab-shift" class="tab-content">
+      <div class="content-header">
+        <h2>📅 シフト管理 ＆ 希望申請</h2>
+        <p>作画期間・締め切りのスケジュールを確認しながら、稼働可能日をまとめて申請できます。</p>
+      </div>
+
+      <div class="shift-layout">
+        <!-- シフト希望フォーム -->
+        <div class="shift-card">
+          <div class="card-title-box">
+            <h3>📝 シフト希望の一括申請</h3>
+            <p>カレンダーで入れる日をタップして複数選択できます</p>
+          </div>
+          <div class="iframe-wrapper shift-form-iframe">
+            <iframe 
+              id="shiftIframe"
+              src="https://script.google.com/macros/s/AKfycbwDdXPnQily_vvcfBtGCmF2O7OEtV9qfqXkspUleEYmmsUGvVKTniucXGNpdUfdZ97y/exec" 
+              frameborder="0">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- 確定スケジュール・Googleカレンダー確認 -->
+        <div class="shift-card">
+          <div class="card-title-box">
+            <h3>📆 制作スケジュール・確定シフト</h3>
+            <p>全体の作画期間や締め切り、確定したシフトはこちらで確認できます</p>
+          </div>
+          <div class="iframe-wrapper calendar-iframe">
+            <!-- 共有Googleカレンダーの埋め込み枠（後から差し替え可能） -->
+            <iframe 
+              id="sharedCalendar"
+              src="https://calendar.google.com/calendar/embed?src=ja.japanese%23holiday%40group.v.calendar.google.com&ctz=Asia%2FTokyo" 
+              style="border: 0" 
+              width="100%" 
+              height="600" 
+              frameborder="0" 
+              scrolling="no">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 使い方ガイド・FAQタブ -->
     <section id="tab-guide" class="tab-content">
       <div class="content-header">
         <h2>📖 勤怠・成果報告アプリの使い方</h2>
@@ -47,8 +93,6 @@
       </div>
 
       <div class="grid-cards">
-        
-        <!-- 時給打刻の使い方 -->
         <article class="card">
           <div class="card-tag">時給制</div>
           <h3>⏱️ 作業の開始・終了・休憩</h3>
@@ -56,43 +100,49 @@
             <li><strong>開始時:</strong> 「時給打刻」タブの【▶️ 作業開始】を押します。</li>
             <li><strong>休憩時:</strong> 席を外すときは【☕ 休憩入】、戻ったら【🏃 戻り】を押してください。</li>
             <li><strong>終了時:</strong> 作業が終わったら【⏹️ 作業終了】を押します。</li>
-            <li><strong>深夜・日またぎ作業:</strong> 22:00〜翌朝05:00などの徹夜作業も、そのまま終了を押せば正確に実働時間が計算されます。</li>
+            <li><strong>深夜・徹夜作業:</strong> 22:00〜翌朝05:00などの日またぎ作業も、そのまま終了を押せば自動で正確に実働時間が計算されます。</li>
           </ul>
         </article>
 
-        <!-- コマ給・完成報告の使い方 -->
         <article class="card">
           <div class="card-tag">コマ給制</div>
           <h3>✨ 完成報告（コマ給の申請）</h3>
           <ul class="rule-list">
             <li><strong>枠サイズの選択:</strong> 担当したコマの枠サイズ（紫枠/青枠/緑枠/赤枠）を選択します。</li>
-            <li><strong>スクショの添付:</strong> 枠内の入力エリアをクリックし、クリスタ等のスクショを <code>Ctrl + V</code>（Macは <code>Cmd + V</code>）で貼り付けるだけで添付できます。</li>
+            <li><strong>画像の複数添付:</strong> 最大10枚まで添付可能。クリスタ等のスクショを <code>Ctrl + V</code> で連続貼り付けできます。</li>
             <li><strong>複数コマ:</strong> 同じ枠サイズを複数仕上げた場合は「コマ数」を増やして一括送信できます。</li>
           </ul>
         </article>
 
-        <!-- 進捗報告の使い方 -->
         <article class="card">
           <div class="card-tag">共通</div>
           <h3>⏳ 進捗報告（描きかけ・作業共有）</h3>
           <ul class="rule-list">
             <li><strong>0コマ完了の日:</strong> 描き終わらなかった日や、途中で作業を引き継ぐ場合は「進捗報告」タブから現状を共有してください。</li>
-            <li><strong>工程・進行度:</strong> 「下描き」「線画進行中（約60%）」などを選択し、スクショを添えて送信するとDiscordに通知されます。</li>
+            <li><strong>工程・進行度:</strong> 「下描き」「線画進行中（約60%）」などを選択し、画像を添えて送信するとDiscordに通知されます。</li>
           </ul>
         </article>
 
-        <!-- トラブル・打刻忘れ対応 -->
         <article class="card" style="border-left: 4px solid #ef4444;">
           <div class="card-tag" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">困ったとき</div>
           <h3>✏️ 終了ボタンを押し忘れた場合</h3>
           <ul class="rule-list">
             <li><strong>押し忘れの修正:</strong> 「打刻修正」タブから、その日の<strong>正しい開始・終了時刻と休憩時間</strong>を入力して送信してください。</li>
-            <li><strong>自動キャンセル機能:</strong> 修正申請を送信すると、システムが自動で押し忘れた打刻ログを破棄し、手動申請の時間を最優先で採用します（二重計上にはなりません）。</li>
+            <li><strong>自動キャンセル機能:</strong> 修正申請を送信すると、システムが自動で押し忘れた打刻ログを破棄し、手動申請の時間を最優先で採用します。</li>
             <li><strong>連打・誤操作:</strong> 誤ってボタンを2回連続で押してしまっても、最初の時間がキープされますのでご安心ください。</li>
           </ul>
         </article>
 
-        <!-- スマホでの利用について -->
+        <article class="card">
+          <div class="card-tag">シフト</div>
+          <h3>📅 シフト申請のやり方</h3>
+          <ul class="rule-list">
+            <li>「シフト管理・申請」タブを開きます。</li>
+            <li>カレンダーで入れる日付をタップ（青く点灯）すると、何日でもまとめて一括申請できます。</li>
+            <li>希望時間帯や特記事項を入力して送信すれば完了です。</li>
+          </ul>
+        </article>
+
         <article class="card">
           <div class="card-tag">便利ワザ</div>
           <h3>📲 スマホをタイムカード化する</h3>
@@ -102,7 +152,6 @@
             <li>ホーム画面にアイコンが作られ、アプリのようにワンタップで打刻画面を開けるようになります。</li>
           </ul>
         </article>
-
       </div>
     </section>
 
