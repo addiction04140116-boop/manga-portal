@@ -131,6 +131,7 @@
             <p>複数日を選んで一度に希望を出せます</p>
           </div>
           <div class="shift-form-iframe">
+            <!-- ★ここに最初から直接シフトURLを指定 -->
             <iframe id="shiftIframe" src="https://script.google.com/macros/s/AKfycbx9U9uLt1TmXJ7EnFcMHea32XRZP0ZJ2b_WJRw9F9BS617JkQniuoikpZIoJnp-CZoIBg/exec" frameborder="0"></iframe>
           </div>
         </div>
@@ -187,8 +188,9 @@
   </footer>
 
   <script>
-    const SECRET_PIN = "0029"; 
+    const SECRET_PIN = "0029"; // パスコード
 
+    // 認証チェック
     window.addEventListener('DOMContentLoaded', () => {
       const savedAuth = localStorage.getItem('portal_auth_token');
       if (savedAuth === SECRET_PIN) {
@@ -214,6 +216,7 @@
       }
     });
 
+    // シンプルで確実なタブ切り替え
     function switchMainTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
