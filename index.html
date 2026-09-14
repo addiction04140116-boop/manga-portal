@@ -3,19 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>アシスタント勤怠・制作報告ポータル</title>
+  <title>アシスタント制作ポータル</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/paint-palette.png">
+  <style>
+    /* パスコード入力モーダル（オーバーレイ） */
+    #authOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0b1120;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 30px 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .auth-card h3 {
+      font-size: 1.2rem;
+      color: #f8fafc;
+      margin-bottom: 8px;
+    }
+    .auth-card p {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    .auth-input:focus {
+      border-color: #3b82f6;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover {
+      background: #1d4ed8;
+    }
+    .auth-error {
+      color: #f87171;
+      font-size: 0.82rem;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ヘッダーナビゲーション -->
+  <!-- パスコード認証オーバーレイ -->
+  <div id="authOverlay">
+    <div class="auth-card">
+      <div style="font-size: 2.2rem; margin-bottom: 8px;">🔒</div>
+      <h3>制作ポータル認証</h3>
+      <p>合言葉（パスコード）を入力してください</p>
+      <input type="password" id="passcodeInput" class="auth-input" placeholder="••••" maxlength="10">
+      <button class="auth-btn" onclick="checkPasscode()">ロック解除</button>
+      <div id="authError" class="auth-error">合言葉が正しくありません</div>
+    </div>
+  </div>
+
+  <!-- ナビゲーションバー -->
   <header class="navbar">
     <div class="nav-brand">
       <span class="logo-icon">🎨</span>
       <span class="logo-text">アシスタント制作ポータル</span>
     </div>
-   <nav class="nav-tabs">
+    <nav class="nav-tabs">
       <button id="btn-app" class="tab-btn active" onclick="switchMainTab('app')">📱 勤怠打刻</button>
       <button id="btn-shift" class="tab-btn" onclick="switchMainTab('shift')">📅 シフト申請</button>
       <button id="btn-guide" class="tab-btn" onclick="switchMainTab('guide')">📖 使い方</button>
@@ -23,137 +107,79 @@
   </header>
 
   <main class="container">
-
-    <!-- 1. 勤怠・成果報告タブ（GAS埋め込み） -->
+    <!-- 1. 勤怠打刻タブ -->
     <section id="tab-app" class="tab-content active">
       <div class="content-header">
-        <h2>⏱️ 勤怠打刻・成果報告</h2>
-        <p>ペンネームを選択の上、打刻または画像添付（最大10枚）して送信してください。</p>
+        <h2>⏱️ 勤怠打刻・制作報告</h2>
+        <p>ペンネームを選択の上、打刻または画像（最大10枚）を添付して送信してください。</p>
       </div>
       <div class="iframe-wrapper">
-        <iframe 
-          id="gasIframe"
-          src="https://script.google.com/macros/s/AKfycbxIGly-CT4j1MxLQKNHaBr4qpRr7keUvg-jJlYCtmhvzoTe3qJXPu1p9bbeSrdih9qEZA/exec" 
-          frameborder="0" 
-          allow="clipboard-read; clipboard-write">
-        </iframe>
+        <iframe id="gasIframe" src="https://script.google.com/macros/s/AKfycbzQ_W7u74vY3_H1vU_O14Q5-ZkE7VpQvY7-dummy/exec" frameborder="0"></iframe>
       </div>
     </section>
 
-    <!-- 2. シフト管理・申請タブ -->
+    <!-- 2. シフト申請・カレンダータブ -->
     <section id="tab-shift" class="tab-content">
       <div class="content-header">
-        <h2>📅 シフト管理 ＆ 希望申請</h2>
-        <p>作画期間・締め切りのスケジュールを確認しながら、稼働可能日をまとめて申請できます。</p>
+        <h2>📅 シフト管理・申請</h2>
+        <p>希望日を選択して一括申請できます。確定スケジュールは右側（スマホは下部）のカレンダーで確認してください。</p>
       </div>
-
       <div class="shift-layout">
-        <!-- シフト希望フォーム -->
         <div class="shift-card">
           <div class="card-title-box">
-            <h3>📝 シフト希望の一括申請</h3>
-            <p>カレンダーで入れる日をタップして複数選択できます</p>
+            <h3>📝 シフト希望申請フォーム</h3>
+            <p>複数日を選んで一度に希望を出せます</p>
           </div>
-          <div class="iframe-wrapper shift-form-iframe">
-            <iframe 
-              id="shiftIframe"
-              src="https://script.google.com/macros/s/AKfycbwDdXPnQily_vvcfBtGCmF2O7OEtV9qfqXkspUleEYmmsUGvVKTniucXGNpdUfdZ97y/exec" 
-              frameborder="0">
-            </iframe>
+          <div class="shift-form-iframe">
+            <iframe id="shiftIframe" src="https://script.google.com/macros/s/AKfycbz_shift_dummy/exec" frameborder="0"></iframe>
           </div>
         </div>
-
-        <!-- 確定スケジュール・Googleカレンダー確認 -->
         <div class="shift-card">
           <div class="card-title-box">
-            <h3>📆 制作スケジュール・確定シフト</h3>
-            <p>全体の作画期間や締め切り、確定したシフトはこちらで確認できます</p>
+            <h3>🗓️ スタジオ予定カレンダー</h3>
+            <p>担当者別のカラーで反映されます</p>
           </div>
-          <div class="iframe-wrapper calendar-iframe">
-            <iframe 
-              id="sharedCalendar"
-              src="https://calendar.google.com/calendar/embed?src=7c7873f43cc021e7bc76accdd89ed1b888bf43761b331f8bbed8a7b82f0eb3ac%40group.calendar.google.com&ctz=Asia%2FTokyo" 
-              style="border: 0" 
-              width="100%" 
-              height="600" 
-              frameborder="0" 
-              scrolling="no">
-            </iframe>
+          <div class="calendar-iframe">
+            <iframe src="https://calendar.google.com/calendar/embed?src=dummy_calendar_id%40group.calendar.google.com&ctz=Asia%2FTokyo" frameborder="0" scrolling="no"></iframe>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. 使い方ガイド・FAQタブ -->
+    <!-- 3. 使い方ガイド -->
     <section id="tab-guide" class="tab-content">
       <div class="content-header">
-        <h2>📖 勤怠・成果報告アプリの使い方</h2>
-        <p>作業時の打刻ルールや、押し忘れたときの対処法、コマ給申請の手順をまとめています。</p>
+        <h2>📖 ご利用ガイド・ルール</h2>
+        <p>作業時の基本的なルールと打刻の手順です。</p>
       </div>
-
       <div class="grid-cards">
-        <article class="card">
-          <div class="card-tag">時給制</div>
-          <h3>⏱️ 作業の開始・終了・休憩</h3>
+        <div class="card">
+          <span class="card-tag">基本</span>
+          <h3>⏱️ 打刻のルール</h3>
           <ul class="rule-list">
-            <li><strong>開始時:</strong> 「時給打刻」タブの【▶️ 作業開始】を押します。</li>
-            <li><strong>休憩時:</strong> 席を外すときは【☕ 休憩入】、戻ったら【🏃 戻り】を押してください。</li>
-            <li><strong>終了時:</strong> 作業が終わったら【⏹️ 作業終了】を押します。</li>
-            <li><strong>深夜・徹夜作業:</strong> 22:00〜翌朝05:00などの日またぎ作業も、そのまま終了を押せば自動で正確に実働時間が計算されます。</li>
+            <li>作業を開始する際、必ず「▶️ 作業開始」を押してください。</li>
+            <li>離席・休憩時は「☕ 休憩入り」、再開時は「🏃 休憩戻り」を押します。</li>
+            <li>押し忘れた場合は「✏️ 打刻修正」タブから正しい時間を申請してください。</li>
           </ul>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">コマ給制</div>
-          <h3>✨ 完成報告（コマ給の申請）</h3>
+        </div>
+        <div class="card">
+          <span class="card-tag">制作</span>
+          <h3>✨ コマ給・進捗報告</h3>
           <ul class="rule-list">
-            <li><strong>枠サイズの選択:</strong> 担当したコマの枠サイズ（紫枠/青枠/緑枠/赤枠）を選択します。</li>
-            <li><strong>画像の複数添付:</strong> 最大10枚まで添付可能。クリスタ等のスクショを <code>Ctrl + V</code> で連続貼り付けできます。</li>
-            <li><strong>複数コマ:</strong> 同じ枠サイズを複数仕上げた場合は「コマ数」を増やして一括送信できます。</li>
+            <li>コマ枠サイズを選び、成果物のスクショをCtrl+Vで貼り付けて送信してください。</li>
+            <li>本日の作業内容や申し送り事項はテキスト欄に記載してください。</li>
           </ul>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">共通</div>
-          <h3>⏳ 進捗報告（描きかけ・作業共有）</h3>
+        </div>
+        <div class="card">
+          <span class="card-tag">予定</span>
+          <h3>📅 シフト申請</h3>
           <ul class="rule-list">
-            <li><strong>0コマ完了の日:</strong> 描き終わらなかった日や、途中で作業を引き継ぐ場合は「進捗報告」タブから現状を共有してください。</li>
-            <li><strong>工程・進行度:</strong> 「下描き」「線画進行中（約60%）」などを選択し、画像を添えて送信するとDiscordに通知されます。</li>
+            <li>カレンダーから希望日を複数選択し、希望時間帯を指定して申請してください。</li>
+            <li>申請完了後、数分以内にスタジオカレンダーに自動反映されます。</li>
           </ul>
-        </article>
-
-        <article class="card" style="border-left: 4px solid #ef4444;">
-          <div class="card-tag" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">困ったとき</div>
-          <h3>✏️ 終了ボタンを押し忘れた場合</h3>
-          <ul class="rule-list">
-            <li><strong>押し忘れの修正:</strong> 「打刻修正」タブから、その日の<strong>正しい開始・終了時刻と休憩時間</strong>を入力して送信してください。</li>
-            <li><strong>自動キャンセル機能:</strong> 修正申請を送信すると、システムが自動で押し忘れた打刻ログを破棄し、手動申請の時間を最優先で採用します。</li>
-            <li><strong>連打・誤操作:</strong> 誤ってボタンを2回連続で押してしまっても、最初の時間がキープされますのでご安心ください。</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">シフト</div>
-          <h3>📅 シフト申請のやり方</h3>
-          <ul class="rule-list">
-            <li>「シフト管理・申請」タブを開きます。</li>
-            <li>カレンダーで入れる日付をタップ（青く点灯）すると、何日でもまとめて一括申請できます。</li>
-            <li>時間指定や特記事項を入力して送信すれば完了です。</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">便利ワザ</div>
-          <h3>📲 スマホをタイムカード化する</h3>
-          <ul class="rule-list">
-            <li><strong>iPhone (Safari):</strong> 画面下の「共有」ボタン ＞「ホーム画面に追加」</li>
-            <li><strong>Android (Chrome):</strong> 右上の「︙」メニュー ＞「ホーム画面に追加」</li>
-            <li>ホーム画面にアイコンが作られ、アプリのようにワンタップで打刻画面を開けるようになります。</li>
-          </ul>
-        </article>
+        </div>
       </div>
     </section>
-
   </main>
 
   <footer class="footer">
@@ -161,17 +187,45 @@
   </footer>
 
   <script>
-    function switchMainTab(targetId) {
+    // ==========================================
+    // パスコード設定（ここを変更してください）
+    // ==========================================
+    const SECRET_PIN = "0029"; // ← お好きなパスコード（数字4桁など）に変更してください
+
+    // 認証チェック
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAuth = localStorage.getItem('portal_auth_token');
+      if (savedAuth === SECRET_PIN) {
+        document.getElementById('authOverlay').style.display = 'none';
+      }
+    });
+
+    function checkPasscode() {
+      const input = document.getElementById('passcodeInput').value;
+      const errorMsg = document.getElementById('authError');
+      if (input === SECRET_PIN) {
+        localStorage.setItem('portal_auth_token', SECRET_PIN);
+        document.getElementById('authOverlay').style.display = 'none';
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('passcodeInput').value = '';
+      }
+    }
+
+    // Enterキーでも送信可能に
+    document.getElementById('passcodeInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkPasscode();
+      }
+    });
+
+    // メインタブ切り替え
+    function switchMainTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-      const activeBtn = document.getElementById('btn-' + targetId);
-      const activeSec = document.getElementById('tab-' + targetId);
-      
-      if (activeBtn) activeBtn.classList.add('active');
-      if (activeSec) activeSec.classList.add('active');
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('btn-' + tabName).classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
     }
   </script>
 </body>
