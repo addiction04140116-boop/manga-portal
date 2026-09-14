@@ -17,4 +17,4 @@ Google Apps Script (GAS) で構築した勤怠・成果管理フォームを埋�
 
 ## 📱 サイトURL
 GitHub Pagesにて稼働中：
-`https://<あなたのGitHubユーザー名>.github.io/manga-portal/`
+`https://github.com/addiction04140116-boop/manga-portal`
